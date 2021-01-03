@@ -1,0 +1,22 @@
+{
+  "files.exclude": {
+    ".vscode": false,
+    ".babelrc": false,
+    "public": false,
+    "node_modules": false,
+    "package.json": false,
+    "package-lock.json": false,
+    "tsconfig.json": false,
+    ".prettierrc": false,
+    "webpack.config.js": false,
+    "webpack.build.js": false,
+    ".gitignore": false,
+    "yarn.lock": false,
+    "**/.umi": false,
+    "**/.umirc.ts": false,
+    "**/.prettierignore": false,
+    "**/.editorconfig": false,
+    "README.md": false,
+    "typings.d.ts": false
+  }
+}
