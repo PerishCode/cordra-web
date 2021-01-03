@@ -10,8 +10,8 @@ export default function Page() {
     __render__: ['Object'],
     properties: {
       a: {
-        __render__: ['Input'],
-        data: '一段文字',
+        __render__: ['Reference'],
+        query: 'type:"Author"',
       },
     },
   })

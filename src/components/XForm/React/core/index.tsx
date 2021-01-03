@@ -8,38 +8,7 @@ import {
 } from '@/components/XForm/reactive/core'
 import { CoreProps, XFormProps, XSchema } from './types'
 import { __render__ } from './global'
-import schema from '@/pages/schema'
-
-let renders = {
-  Object: ({ schema: { properties } }) => {
-    let result: any[] = []
-
-    Object.keys(properties).forEach(k => {
-      const children = core({ schema: properties[k], index: k }) as any
-      if (Array.isArray(children)) result = result.concat(children)
-      else result.push(children)
-    })
-
-    return result
-  },
-  Array: ({ schema: { template, items } }) =>
-    items.map((item, index) =>
-      core({ schema: template, addition: item, index })
-    ),
-
-  Info: ({ schema }) => <div>{JSON.stringify(schema)}</div>,
-  Input: ({ schema }) => (
-    <input value={schema.data} onChange={e => (schema.data = e.target.value)} />
-  ),
-  Void: () => null,
-}
-
-export function registerRender(addition) {
-  renders = {
-    ...renders,
-    ...addition,
-  }
-}
+import renders from '../renders'
 
 export function core({ schema, addition, index }: CoreProps) {
   const combination = combine(schema, addition) as XSchema
