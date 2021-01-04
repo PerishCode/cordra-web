@@ -11,7 +11,5 @@ export default function Preview({ schema: { data: id } }) {
         getSchemaByTypeName(type).then(setSchema)
       })
   }, [id])
-
-  //   return <div>{core({ schema })}</div>
   return <div>{JSON.stringify(schema)}</div>
 }

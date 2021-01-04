@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Collapse } from 'antd'
-import { connect } from 'umi'
+import { Collapse, Button } from 'antd'
+import { connect, history } from 'umi'
 import { namespace } from './model'
 import { Icon } from '@/components'
 import './index.sass'
@@ -51,6 +51,7 @@ function Page(props: any) {
           </Panel>
         ))}
       </Collapse>
+      <Button onClick={() => history.push('/schema/new')}>新建 Schema</Button>
     </div>
   )
 }

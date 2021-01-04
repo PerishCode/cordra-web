@@ -1,60 +1,63 @@
 import React, { useState } from 'react'
-import { JSONEditor, XForm } from '@/components'
-import './index.sass'
+import { JSONEditor, XForm, Card } from '@/components'
 import { transformer } from '@/utils/transformer'
+import { Button } from 'antd'
+import './index.sass'
+import { createSchema } from '@/utils/request'
 
 export default function Page() {
   const [type, setType] = useState('')
-
+  const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
     __render__: ['Object'],
+    type: 'object',
     properties: {
-      a: {
-        __render__: ['Preview', 'Reference'],
-        query: {
-          queryJson: {
-            name: 'Perish',
-          },
-        },
+      name: {
+        __render__: ['Input', 'Label'],
+        type: 'string',
+        title: '姓名',
+      },
+      school: {
+        __render__: ['Input', 'Label'],
+        type: 'string',
+        title: '学校',
       },
     },
   })
 
-  const [formData, setFormData] = useState(null)
+  function createHandler() {
+    createSchema(type, schema).then(console.log).catch(console.error)
+  }
 
   return (
     <div className="page schema-new container">
-      <div className="card editor">
-        <div className="title">
+      <Card
+        title={
           <input
-            type="text"
             className="type-input"
             value={type}
             onChange={e => setType(e.target.value)}
             placeholder="在此输入新建 Schema 名称"
           />
-        </div>
-        <div className="body">
-          <JSONEditor
-            mode="code"
-            json={schema}
-            onChange={j => setSchema(j)}
-            hideMenu={true}
-          />
-        </div>
-      </div>
-      <div className="card preview-form">
-        <div className="title">表单预览</div>
-        <div className="body">
-          <XForm schema={schema} onChange={d => setFormData(transformer(d))} />
-        </div>
-      </div>
-      <div className="card preview-formdata">
-        <div className="title">表单数据预览</div>
-        <div className="body">
-          <JSONEditor mode="view" json={formData} />
-        </div>
-      </div>
+        }
+        className="editor"
+      >
+        <JSONEditor
+          mode="code"
+          json={schema}
+          onChange={setSchema}
+          hideMenu={true}
+        />
+      </Card>
+      <Card title="表单预览" className="preview-form">
+        <XForm schema={schema} onChange={d => setFormData(transformer(d))} />
+      </Card>
+      <Card title="表单数据预览" className="preview-formdata">
+        <JSONEditor mode="view" json={formData} />
+      </Card>
+      <Button className="create" onClick={createHandler}>
+        确认创建
+      </Button>
     </div>
   )
 }

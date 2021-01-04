@@ -35,3 +35,13 @@ export function getObjectById(id, params = '') {
     }),
   }).then(res => res.json())
 }
+
+export function createSchema(type, schema) {
+  return fetch('/cordra/schemas/' + type, {
+    method: 'put',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+    body: JSON.stringify(schema),
+  }).then(res => res.json())
+}

@@ -26,22 +26,16 @@ export default function JSONEditor(props: Props) {
   } as JSONEditorOptions
 
   useEffect(() => {
-    editor.current = new JE(containerRef.current, options)
-
-    editor.current.set(
-      props.json || {
-        a: 'b',
-      }
-    )
+    editor.current = new JE(containerRef.current, options, null)
   }, [])
 
   useEffect(() => {
-    props.mode === 'view' &&
-      editor.current.set(
-        props.json || {
-          a: 'b',
-        }
-      )
+    if (
+      editor.current.get() === null ||
+      JSON.stringify(editor.current.get()) === '{}' ||
+      props.mode === 'view'
+    )
+      editor.current.set(props.json)
   }, [props.json])
 
   return <div ref={containerRef} className="component JSONEditor container" />
