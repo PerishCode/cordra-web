@@ -1,5 +1,6 @@
 import React from 'react'
 import Reference from './Reference'
+import Preview from './Preview'
 import { core } from '../core'
 
 let renders = {
@@ -25,6 +26,7 @@ let renders = {
   ),
   Void: () => null,
   Reference,
+  Preview,
 }
 
 export default renders

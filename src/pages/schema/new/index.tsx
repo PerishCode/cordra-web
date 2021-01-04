@@ -10,8 +10,12 @@ export default function Page() {
     __render__: ['Object'],
     properties: {
       a: {
-        __render__: ['Reference'],
-        query: 'type:"Author"',
+        __render__: ['Preview', 'Reference'],
+        query: {
+          queryJson: {
+            name: 'Perish',
+          },
+        },
       },
     },
   })

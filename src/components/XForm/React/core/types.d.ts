@@ -14,6 +14,7 @@ export interface XFormProps {
 }
 
 export interface XSchema {
-  [__render__]: FunctionComponent<CoreProps>[]
+  // [__render__]: FunctionComponent<CoreProps>[]
+  __render__?: string[] | FunctionComponent<CoreProps>[]
   [key: string]: any
 }

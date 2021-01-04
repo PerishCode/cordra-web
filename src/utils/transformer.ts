@@ -8,8 +8,6 @@ export function transformer(source) {
       result[k] = transformer(from[k])
     })
 
-    console.log(result)
-
     return result
   }
 

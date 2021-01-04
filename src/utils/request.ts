@@ -26,3 +26,12 @@ export function getSchemaByTypeName(type) {
     }),
   }).then(res => res.json())
 }
+
+export function getObjectById(id, params = '') {
+  return fetch('/cordra/objects/' + id + '?' + params, {
+    method: 'get',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+  }).then(res => res.json())
+}
