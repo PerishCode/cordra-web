@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { JSONEditor, XForm, Card } from '@/components'
-import { transformer } from '@/utils/transformer'
+import { parseFormDataFromSchema } from '@/utils/transformer'
 import { Button } from 'antd'
 import './index.sass'
 import { createSchema } from '@/utils/request'
@@ -9,20 +9,30 @@ export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    __render__: ['Object'],
-    type: 'object',
-    properties: {
-      name: {
-        __render__: ['Input', 'Label'],
-        type: 'string',
-        title: '姓名',
-      },
-      school: {
-        __render__: ['Input', 'Label'],
-        type: 'string',
-        title: '学校',
+    __render__: ['Array'],
+    type: 'array',
+    items: {
+      __render__: ['Object', 'Option'],
+      type: 'object',
+      properties: {
+        a: {
+          __render__: ['Input'],
+          type: 'string',
+        },
       },
     },
+    data: [
+      {
+        __render__: ['Object', 'Option'],
+        type: 'object',
+        properties: {
+          a: {
+            __render__: ['Input'],
+            type: 'string',
+          },
+        },
+      },
+    ],
   })
 
   function createHandler() {
@@ -50,7 +60,10 @@ export default function Page() {
         />
       </Card>
       <Card title="表单预览" className="preview-form">
-        <XForm schema={schema} onChange={d => setFormData(transformer(d))} />
+        <XForm
+          schema={schema}
+          onChange={d => setFormData(parseFormDataFromSchema(d))}
+        />
       </Card>
       <Card title="表单数据预览" className="preview-formdata">
         <JSONEditor mode="view" json={formData} />

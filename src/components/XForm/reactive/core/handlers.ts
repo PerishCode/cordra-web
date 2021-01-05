@@ -209,7 +209,9 @@ export function combine(source: Reaction, auxiliary: Reaction) {
     {},
     {
       get(_, key: Key) {
-        return auxiliary[key] === undefined ? source[key] : auxiliary[key]
+        return source[key] !== undefined
+          ? combine(source[key], auxiliary[key])
+          : auxiliary[key]
       },
       set(_, key: Key, value: any) {
         return raw[key] === undefined

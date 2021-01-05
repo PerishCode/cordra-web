@@ -19,13 +19,14 @@ function Page(props: any) {
   }, [])
 
   function newPostClickHandler(e) {
-    console.log(this, 'new post')
+    history.push('/object/new/' + this)
 
     e.stopPropagation()
   }
 
   function editClickHandler(e) {
-    console.log(this, 'edit')
+    history.push('/schema/' + this)
+    // console.log('/schema/' + this)
 
     e.stopPropagation()
   }

@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import { Card, JSONEditor, XForm } from '@/components'
 import { parseFormDataFromSchema } from '@/utils/transformer'
-import { getSchemaByTypeName, updateSchema } from '@/utils/request'
+import {
+  createObjectByTypeName,
+  getSchemaByTypeName,
+  updateSchema,
+} from '@/utils/request'
 import './index.sass'
 
 export default function Page({
@@ -13,8 +17,10 @@ export default function Page({
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState(null)
 
-  function storeHandler() {
-    updateSchema(type, schema).then(console.log)
+  function createHandler() {
+    createObjectByTypeName(type, formData)
+      .then(console.log)
+      .catch(console.error)
   }
 
   useEffect(() => {
@@ -22,26 +28,18 @@ export default function Page({
   }, [])
 
   return (
-    <div className="page schema-single container">
-      <Card title={type} className="editor">
-        <JSONEditor
-          mode="code"
-          json={schema}
-          onChange={setSchema}
-          hideMenu={true}
-        />
-      </Card>
-      <Card title="表单预览" className="preview-form">
+    <div className="page object-new container">
+      <Card title="表单填写" className="form">
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
         />
       </Card>
-      <Card title="表单数据预览" className="preview-formdata">
+      <Card title="表单数据预览" className="formdata">
         <JSONEditor mode="view" json={formData} />
       </Card>
-      <Button className="store" onClick={storeHandler}>
-        保存
+      <Button className="create" onClick={createHandler}>
+        创建
       </Button>
     </div>
   )

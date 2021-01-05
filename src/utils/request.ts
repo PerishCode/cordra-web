@@ -27,6 +27,26 @@ export function getSchemaByTypeName(type) {
   }).then(res => res.json())
 }
 
+export function createSchema(type, schema) {
+  return fetch('/cordra/schemas/' + type, {
+    method: 'put',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+    body: JSON.stringify(schema),
+  }).then(res => res.json())
+}
+
+export function updateSchema(type, schema) {
+  return fetch('/cordra/schemas/' + type, {
+    method: 'put',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+    body: JSON.stringify(schema),
+  }).then(res => res.json())
+}
+
 export function getObjectById(id, params = '') {
   return fetch('/cordra/objects/' + id + '?' + params, {
     method: 'get',
@@ -36,12 +56,22 @@ export function getObjectById(id, params = '') {
   }).then(res => res.json())
 }
 
-export function createSchema(type, schema) {
-  return fetch('/cordra/schemas/' + type, {
+export function createObjectByTypeName(type, content) {
+  return fetch('/cordra/objects?type=' + type, {
+    method: 'post',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+    body: JSON.stringify(content),
+  }).then(res => res.json())
+}
+
+export function updateObjectById(id, content) {
+  return fetch('/cordra/objects/' + id, {
     method: 'put',
     headers: new Headers({
       Authorization: 'Basic ' + btoa('admin:king'),
     }),
-    body: JSON.stringify(schema),
+    body: JSON.stringify(content),
   }).then(res => res.json())
 }

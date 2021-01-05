@@ -1,6 +1,8 @@
 import React from 'react'
+import { Button } from 'antd'
 import Reference from './Reference'
 import Preview from './Preview'
+
 import { core } from '../core'
 import './index.sass'
 
@@ -16,14 +18,50 @@ let renders = {
 
     return result
   },
-  Array: ({ schema: { template, items } }) =>
-    items.map((item, index) =>
-      core({ schema: template, addition: item, index })
-    ),
+  // Array: ({ schema: { data, items } }) =>
+  //   data.map((d, index) => core({ schema: items, addition: d, index })),
+  Array: ({ schema: { data } }) => {
+    return Array.isArray(data)
+      ? data.map((d, index) => core({ schema: d, index }))
+      : null
+  },
+  Default: ({ schema, children, index }) => {
+    const { data, items } = schema
+    if (Array.isArray(data) && data.length) return children
+    return (
+      <Button
+        onClick={() => {
+          schema.data = [JSON.parse(JSON.stringify(items))]
+        }}
+      >
+        ADD
+      </Button>
+    )
+  },
 
+  Option: ({ schema, children, index }) => (
+    <div>
+      {children}
+      <Button
+        onClick={() => {
+          schema.$.splice(
+            index + 1,
+            0,
+            JSON.parse(JSON.stringify(schema.$.$.items))
+          )
+        }}
+      >
+        ADD
+      </Button>
+      <Button onClick={() => schema.$.splice(index, 1)}>DEL</Button>
+    </div>
+  ),
   Info: ({ schema }) => <div>{JSON.stringify(schema)}</div>,
   Input: ({ schema }) => (
-    <input value={schema.data} onChange={e => (schema.data = e.target.value)} />
+    <input
+      value={schema.data || ''}
+      onChange={e => (schema.data = e.target.value)}
+    />
   ),
   Label: ({ children, schema: { title } }) => (
     <div className="XForm-Label">
