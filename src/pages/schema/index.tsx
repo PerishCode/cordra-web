@@ -20,14 +20,11 @@ function Page(props: any) {
 
   function newPostClickHandler(e) {
     history.push('/object/new/' + this)
-
     e.stopPropagation()
   }
 
   function editClickHandler(e) {
     history.push('/schema/' + this)
-    // console.log('/schema/' + this)
-
     e.stopPropagation()
   }
 

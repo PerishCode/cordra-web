@@ -4,7 +4,7 @@ import 'jsoneditor/dist/jsoneditor.css'
 import './index.sass'
 
 interface Props {
-  json: any
+  json?: any
   mode: string
   hideMenu?: boolean
   onChange?: Function
@@ -32,7 +32,7 @@ export default function JSONEditor(props: Props) {
   useEffect(() => {
     if (
       editor.current.get() === null ||
-      JSON.stringify(editor.current.get()) === '{}' ||
+      editor.current.getText() === '{}' ||
       props.mode === 'view'
     )
       editor.current.set(props.json)

@@ -8,10 +8,10 @@ export default () => {
       <h1>主页</h1>
       <ul>
         <li>
-          <Link to="/schema">Schema 查询/编辑</Link>
+          <Link to="/schema">Schema</Link>
         </li>
         <li>
-          <Link to="/document">Document 查询/编辑</Link>
+          <Link to="/object">数字对象</Link>
         </li>
       </ul>
     </div>
