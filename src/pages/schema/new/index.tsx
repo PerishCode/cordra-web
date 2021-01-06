@@ -1,42 +1,41 @@
 import React, { useState } from 'react'
 import { JSONEditor, XForm, Card } from '@/components'
 import { parseFormDataFromSchema } from '@/utils/transformer'
-import { Button } from 'antd'
-import './index.sass'
+import { Button, message } from 'antd'
 import { createSchema } from '@/utils/request'
+import './index.sass'
+import { history } from 'umi'
 
 export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    __render__: ['Array'],
-    type: 'array',
-    items: {
-      __render__: ['Object', 'Option'],
-      type: 'object',
-      properties: {
-        a: {
-          __render__: ['Input'],
-          type: 'string',
+    __render__: ['Object'],
+    type: 'object',
+    properties: {
+      firstAuthor: {
+        __render__: ['Preview', 'Reference'],
+        type: 'string',
+        parameters: {
+          query: 'type:"Author"',
         },
       },
     },
-    data: [
-      {
-        __render__: ['Object', 'Option'],
-        type: 'object',
-        properties: {
-          a: {
-            __render__: ['Input'],
-            type: 'string',
-          },
-        },
-      },
-    ],
+    // __render__: ['Object'],
+    // type: 'object',
+    // properties: {
+    //   name: {
+    //     __render__: ['Input', 'Label'],
+    //     type: 'string',
+    //     title: '姓名',
+    //   },
+    // },
   })
 
   function createHandler() {
-    createSchema(type, schema).then(console.log).catch(console.error)
+    createSchema(type, schema)
+      .then(() => history.push('/schema/' + type))
+      .catch(err => message.error(err.message, 1))
   }
 
   return (

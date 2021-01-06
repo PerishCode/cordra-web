@@ -28,6 +28,11 @@ export function getSchemaByTypeName(type) {
 }
 
 export function createSchema(type, schema) {
+  if (typeof type !== 'string' || type.length === 0)
+    return new Promise((resolve, reject) => {
+      reject(new Error('类型名称不能为空'))
+    })
+
   return fetch('/cordra/schemas/' + type, {
     method: 'put',
     headers: new Headers({
@@ -57,7 +62,7 @@ export function getObjectById(id, params = '') {
 }
 
 export function createObjectByTypeName(type, content) {
-  return fetch('/cordra/objects?type=' + type, {
+  return fetch('/cordra/objects?type=' + type + '&full', {
     method: 'post',
     headers: new Headers({
       Authorization: 'Basic ' + btoa('admin:king'),

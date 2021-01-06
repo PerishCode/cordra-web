@@ -1,0 +1,34 @@
+#root
+    &>.layout
+        height: 100%
+        width: 100%
+        $navigatorWidth: 30px
+
+        background-color: rgba(172, 205, 243, 0.479)
+
+        &>.navigator
+            // height: 30px
+            position: absolute
+            height: 100%
+            width: $navigatorWidth
+            background-color: rgba(1, 25, 53, 0.842)
+            display: flex
+            flex-direction: column
+            align-items: center
+            padding-top: 10px
+
+            &>.anticon
+                font-size: 22px
+                width: 22px
+                margin-left: -2px
+                background-color: rgb(255, 255, 255)
+                border-radius: 2px
+                // filter: drop-shadow(16px 16px 10px rgba(209, 147, 12, 0.705))
+                box-shadow: 1px 1px 5px rgba(248, 152, 27, 0.452)
+                margin-bottom: 5px
+
+        &>.content
+            position: absolute
+            height: 100%
+            width: calc( 100% - #{$navigatorWidth} )
+            left: $navigatorWidth

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import {
   getObjectById,
   getSchemaByTypeName,
@@ -31,7 +31,9 @@ export default function Page({
   }, [])
 
   function storeHandler() {
-    updateObjectById(actualId, formData)
+    updateObjectById(actualId, formData).then(() =>
+      message.success('保存成功', 1)
+    )
   }
 
   return (

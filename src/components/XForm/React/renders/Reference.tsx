@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { search } from '@/utils/request'
 import { Select, Button } from 'antd'
-import core from '../core'
+import { search } from '@/utils/request'
 
 const { Option } = Select
 
@@ -9,9 +8,7 @@ export default function Reference({ schema, children }) {
   const [options, setOptions] = useState([])
 
   function updateHandler() {
-    const { query } = schema
-
-    search(query).then(({ results }) => setOptions(results))
+    search(schema.parameters).then(({ results }) => setOptions(results))
   }
 
   useEffect(() => {

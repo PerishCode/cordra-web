@@ -8,6 +8,7 @@ import {
   updateSchema,
 } from '@/utils/request'
 import './index.sass'
+import { history } from 'umi'
 
 export default function Page({
   match: {
@@ -19,7 +20,7 @@ export default function Page({
 
   function createHandler() {
     createObjectByTypeName(type, formData)
-      .then(console.log)
+      .then(({ id }) => history.push('/object/' + id.replaceAll('/', '.')))
       .catch(console.error)
   }
 

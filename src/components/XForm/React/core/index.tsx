@@ -7,7 +7,6 @@ import {
   unobserveGlobal,
 } from '@/components/XForm/reactive/core'
 import { CoreProps, XFormProps, XSchema } from './types'
-import { __render__ } from './global'
 import renders from '../renders'
 
 export function core({ schema, addition, index }: CoreProps) {
@@ -16,16 +15,21 @@ export function core({ schema, addition, index }: CoreProps) {
 
   let unit: any = null
   if (Array.isArray(renderKeys))
-    renderKeys.forEach((key, i) => {
+    renderKeys.forEach(key => {
       const render: any = renders[key] || renders['Void']
-      unit =
-        i + 1 !== renderKeys.length
-          ? render({ schema: combination, index, children: unit })
-          : React.createElement(
-              render,
-              { schema: combination, index, key: index },
-              unit
-            )
+      // unit =
+      //   i + 1 !== renderKeys.length
+      //     ? render({ schema: combination, index, children: unit })
+      //     : React.createElement(
+      //         render,
+      //         { schema: combination, index, key: index },
+      //         unit
+      //       )
+      unit = React.createElement(
+        render,
+        { schema: combination, index, key: index },
+        unit
+      )
     })
   return unit
 }

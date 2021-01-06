@@ -1,15 +1,13 @@
-import { getObjectById, getSchemaByTypeName } from '@/utils/request'
 import React, { useEffect, useState } from 'react'
-import { core } from '../core'
+import { getObjectById } from '@/utils/request'
 
 export default function Preview({ schema: { data: id } }) {
-  const [schema, setSchema] = useState({})
+  const [content, setContent] = useState(null)
 
   useEffect(() => {
-    id &&
-      getObjectById(id, 'full').then(({ type, content }) => {
-        getSchemaByTypeName(type).then(setSchema)
-      })
+    if (!id) return
+    getObjectById(id, 'full').then(({ type, content }) => setContent(content))
   }, [id])
-  return <div>{JSON.stringify(schema)}</div>
+
+  return <div>{JSON.stringify(content)}</div>
 }

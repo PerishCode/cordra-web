@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from 'antd'
 import Reference from './Reference'
 import Preview from './Preview'
-
+import Test from './Test'
 import { core } from '../core'
 import './index.sass'
 
@@ -18,8 +18,6 @@ let renders = {
 
     return result
   },
-  // Array: ({ schema: { data, items } }) =>
-  //   data.map((d, index) => core({ schema: items, addition: d, index })),
   Array: ({ schema: { data } }) => {
     return Array.isArray(data)
       ? data.map((d, index) => core({ schema: d, index }))
@@ -72,6 +70,7 @@ let renders = {
   Void: () => null,
   Reference,
   Preview,
+  Test,
 }
 
 export default renders
