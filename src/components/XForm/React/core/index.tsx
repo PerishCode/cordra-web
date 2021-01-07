@@ -25,16 +25,15 @@ export function core({ schema, addition, index }: CoreProps) {
               { schema: combination, index, key: index },
               unit
             )
-      // unit = React.createElement(
-      //   render,
-      //   { schema: combination, index, key: index },
-      //   unit
-      // )
     })
   return unit
 }
 
-export default function XForm({ schema: initialSchema, onChange }: XFormProps) {
+export default function XForm({
+  schema: initialSchema,
+  onChange,
+  transformer,
+}: XFormProps) {
   const container = useRef()
   const reactionRef = useRef(null)
 
@@ -52,9 +51,15 @@ export default function XForm({ schema: initialSchema, onChange }: XFormProps) {
   }, [])
 
   useEffect(() => {
-    if (initialSchema !== null) reactionRef.current = reactive(initialSchema)
+    if (initialSchema !== null) {
+      let actualSchema = JSON.parse(JSON.stringify(initialSchema))
+      console.log(actualSchema)
+
+      if (transformer) actualSchema = transformer(actualSchema)
+      reactionRef.current = reactive(actualSchema)
+    }
     render()
-  }, [initialSchema])
+  }, [initialSchema, transformer])
 
   return React.createElement('div', {
     ref: container,

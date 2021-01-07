@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import { Card, JSONEditor, XForm } from '@/components'
-import { parseFormDataFromSchema } from '@/utils/transformer'
+import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
 import {
   createObjectByTypeName,
   getSchemaByTypeName,
@@ -34,6 +34,7 @@ export default function Page({
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
+          transformer={schemaEnlarge}
         />
       </Card>
       <Card title="表单数据预览" className="formdata">

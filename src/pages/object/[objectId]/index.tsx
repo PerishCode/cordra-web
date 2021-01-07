@@ -8,6 +8,7 @@ import {
 import {
   combineFormDataAndSchema,
   parseFormDataFromSchema,
+  schemaEnlarge,
 } from '@/utils/transformer'
 import { XForm, Card, JSONEditor } from '@/components'
 import './index.sass'
@@ -25,7 +26,7 @@ export default function Page({
   useEffect(() => {
     getObjectById(actualId, 'full').then(({ type, content }) =>
       getSchemaByTypeName(type).then(schema =>
-        setSchema(combineFormDataAndSchema(schema, content))
+        setSchema(combineFormDataAndSchema(schemaEnlarge(schema), content))
       )
     )
   }, [])
@@ -42,6 +43,7 @@ export default function Page({
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
+          // transformer={}
         />
       </Card>
       <Card title="表单数据预览" className="formdata">

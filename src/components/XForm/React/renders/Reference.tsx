@@ -7,7 +7,7 @@ function Reference({ schema, children }) {
   const [options, setOptions] = useState([])
 
   function updateHandler() {
-    search(schema.parameters).then(({ results }) => setOptions(results))
+    search(schema['__link__']).then(({ results }) => setOptions(results))
   }
 
   useEffect(() => {

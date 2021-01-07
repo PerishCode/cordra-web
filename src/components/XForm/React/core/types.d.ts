@@ -11,6 +11,7 @@ export interface CoreProps {
 export interface XFormProps {
   schema?: any
   onChange?: (data: any) => void
+  transformer?: Function
 }
 
 export interface XSchema {

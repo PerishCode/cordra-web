@@ -1,26 +1,25 @@
 import React, { useState } from 'react'
-import { JSONEditor, XForm, Card } from '@/components'
-import { parseFormDataFromSchema } from '@/utils/transformer'
 import { Button, message } from 'antd'
+import { history } from 'umi'
+import { JSONEditor, XForm, Card } from '@/components'
+import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
 import { createSchema } from '@/utils/request'
 import './index.sass'
-import { history } from 'umi'
 
 export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    __render__: ['Array', 'Default', 'Table'],
+    __render__: 'Table',
     type: 'array',
     items: {
-      __render__: ['Object', 'TableRow'],
+      __render__: 'TableRow',
       type: 'object',
       properties: {
         firstAuthor: {
-          __render__: ['Preview', 'Reference'],
           type: 'string',
           title: '第一作者',
-          parameters: {
+          __link__: {
             query: 'type:"Author"',
           },
         },
@@ -58,6 +57,7 @@ export default function Page() {
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
+          transformer={schemaEnlarge}
         />
       </Card>
       <Card title="表单数据预览" className="preview-formdata">
