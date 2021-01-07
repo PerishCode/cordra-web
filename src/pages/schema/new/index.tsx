@@ -12,19 +12,7 @@ export default function Page() {
   const [schema, setSchema] = useState({
     __render__: 'Table',
     type: 'array',
-    items: {
-      __render__: 'TableRow',
-      type: 'object',
-      properties: {
-        firstAuthor: {
-          type: 'string',
-          title: '第一作者',
-          __link__: {
-            query: 'type:"Author"',
-          },
-        },
-      },
-    },
+    items: '$dingling',
   })
 
   function createHandler() {

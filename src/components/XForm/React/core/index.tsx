@@ -17,15 +17,15 @@ export function core({ schema, addition, index }: CoreProps) {
   if (Array.isArray(renderKeys))
     renderKeys.forEach((key, i) => {
       const render: any = renders[key] || renders['Void']
-      unit =
-        i + 1 !== renderKeys.length && !render['withHooks']
-          ? render({ schema: combination, index, children: unit })
-          : React.createElement(
-              render,
-              { schema: combination, index, key: index },
-              unit
-            )
+      unit = !render['withHooks']
+        ? render({ schema: combination, index, children: unit })
+        : React.createElement(
+            render,
+            { schema: combination, index, key: index },
+            unit
+          )
     })
+
   return unit
 }
 
@@ -37,28 +37,27 @@ export default function XForm({
   const container = useRef()
   const reactionRef = useRef(null)
 
-  function render() {
+  function render(source = null) {
+    if (source) reactionRef.current = reactive(source as any)
     const reaction = reactionRef.current
+
     onChange && onChange(reaction)
     reaction &&
       ReactDOM.render(core({ schema: reaction }), container.current as any)
   }
 
   useEffect(() => {
-    observeGlobal(render)
+    const emptyRender = () => render()
+    observeGlobal(emptyRender)
     render()
-    return () => unobserveGlobal(render)
+    return () => unobserveGlobal(emptyRender)
   }, [])
 
   useEffect(() => {
     if (initialSchema !== null) {
       let actualSchema = JSON.parse(JSON.stringify(initialSchema))
-      console.log(actualSchema)
-
-      if (transformer) actualSchema = transformer(actualSchema)
-      reactionRef.current = reactive(actualSchema)
+      transformer && transformer(actualSchema).then(render)
     }
-    render()
   }, [initialSchema, transformer])
 
   return React.createElement('div', {

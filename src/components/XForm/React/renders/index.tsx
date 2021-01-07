@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button } from 'antd'
 import Reference from './Reference'
-import Preview from './Preview'
-import { Table, TableRow } from './Table'
+import Table from './Table'
 import Test from './Test'
 import { core } from '../core'
 import './index.sass'
@@ -31,6 +30,10 @@ let renders = {
       <Button
         onClick={() => {
           schema.data = [JSON.parse(JSON.stringify(items))]
+
+          console.log(schema)
+
+          // console.log(schema)
         }}
       >
         新增
@@ -56,8 +59,9 @@ let renders = {
     </div>,
   ],
   Info: ({ schema }) => <div>{JSON.stringify(schema)}</div>,
-  Input: ({ schema }) => (
+  Input: ({ schema, index }) => (
     <input
+      key={index}
       value={schema.data || ''}
       onChange={e => (schema.data = e.target.value)}
     />
@@ -70,9 +74,7 @@ let renders = {
   ),
   Void: () => null,
   Reference,
-  Preview,
   Table,
-  TableRow,
   Test,
 }
 

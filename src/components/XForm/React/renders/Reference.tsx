@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Select, Button } from 'antd'
-import { search } from '@/utils/request'
+import { getObjectById, search } from '@/utils/request'
 
 const { Option } = Select
 function Reference({ schema, children }) {
   const [options, setOptions] = useState([])
+  const [content, setContent] = useState(null)
+  const id = schema.data
+
+  useEffect(() => {
+    if (!id) return
+    getObjectById(id, 'full').then(({ type, content }) => setContent(content))
+  }, [id])
 
   function updateHandler() {
     search(schema['__link__']).then(({ results }) => setOptions(results))
@@ -16,7 +23,7 @@ function Reference({ schema, children }) {
 
   return (
     <div>
-      <Select onChange={v => (schema.data = v)}>
+      <Select value={id} onChange={v => (schema.data = v)}>
         {options.map((o: any, i) => (
           <Option key={i} value={o.id}>
             {o.id}
@@ -24,7 +31,6 @@ function Reference({ schema, children }) {
         ))}
       </Select>
       <Button onClick={updateHandler}>更新选项</Button>
-      {children}
     </div>
   )
 }

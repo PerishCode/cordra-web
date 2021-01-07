@@ -1,3 +1,5 @@
+import { getSchemaByTypeName } from './request'
+
 export function parseFormDataFromSchema(source) {
   if (source === null || typeof source !== 'object') return source
 
@@ -36,45 +38,63 @@ export function combineFormDataAndSchema(schema, formData) {
 }
 
 const parsers = {
-  array: schema => {
-    if (!schema['__render__']) schema['__render__'] = []
+  array: schema =>
+    new Promise((resolve, reject) => {
+      if (!schema['__render__']) schema['__render__'] = []
 
-    if (typeof schema['__render__'] === 'string')
-      schema['__render__'] = [schema['__render__']]
+      if (typeof schema['__render__'] === 'string')
+        schema['__render__'] = [schema['__render__']]
 
-    if (schema['__render__'].findIndex(k => k === 'Array') < 0)
-      schema['__render__'].splice(0, 0, 'Array', 'Default')
+      if (schema['__render__'].findIndex(k => k === 'Array') < 0)
+        schema['__render__'].splice(0, 0, 'Array', 'Default')
 
-    schema.items = schemaEnlarge(schema.items)
+      schemaEnlarge(schema.items).then(result => {
+        schema.items = result
+        resolve(schema)
+      })
+    }),
 
-    return schema
-  },
+  object: schema =>
+    new Promise(resolve => {
+      if (!schema['__render__']) schema['__render__'] = []
+      if (typeof schema['__render__'] === 'string')
+        schema['__render__'] = [schema['__render__']]
+      if (schema['__render__'].findIndex(k => k === 'Object') < 0)
+        schema['__render__'].splice(0, 0, 'Object')
+      Promise.all(
+        Object.keys(schema.properties).map(k =>
+          schemaEnlarge(schema.properties[k])
+        )
+      ).then(results => {
+        Object.keys(schema.properties).forEach((k, i) => {
+          schema.properties[k] = results[i]
+        })
 
-  object: schema => {
-    if (!schema['__render__']) schema['__render__'] = []
-    if (typeof schema['__render__'] === 'string')
-      schema['__render__'] = [schema['__render__']]
-    if (schema['__render__'].findIndex(k => k === 'Object') < 0)
-      schema['__render__'].splice(0, 0, 'Object')
+        resolve(schema)
+      })
+    }),
+  string: schema =>
+    new Promise((resolve, reject) => {
+      if (schema['__link__']) schema['__render__'] = ['Reference']
 
-    let properties = {}
-
-    Object.keys(schema.properties || {}).forEach(k => {
-      properties[k] = schemaEnlarge(schema.properties[k])
-    })
-
-    return schema
-  },
-
-  string: schema => {
-    if (schema['__link__']) schema['__render__'] = ['Preview', 'Reference']
-
-    return schema
-  },
+      resolve(schema)
+    }),
 }
 
 export function schemaEnlarge(schema) {
-  const parser = parsers[schema['type']]
+  return new Promise((resolve, reject) => {
+    // if (schema === null) reject(new Error('schema is null'))
+    if (schema === null) resolve({})
 
-  return parser ? parser(schema) : schema
+    if (typeof schema === 'string') {
+      if (schema.startsWith('$')) {
+        const ref = schema.substring(1)
+        getSchemaByTypeName(ref).then(schemaEnlarge).then(resolve).catch(reject)
+      } else resolve({})
+    } else {
+      const parser = parsers[schema['type']]
+      if (parser) parser(schema).then(resolve).catch(reject)
+      else resolve(schema)
+    }
+  })
 }
