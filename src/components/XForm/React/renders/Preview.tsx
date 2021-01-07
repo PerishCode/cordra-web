@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getObjectById } from '@/utils/request'
 
-export default function Preview({ schema: { data: id } }) {
+function Preview({ schema: { data: id } }) {
   const [content, setContent] = useState(null)
 
   useEffect(() => {
@@ -11,3 +11,7 @@ export default function Preview({ schema: { data: id } }) {
 
   return <div>{JSON.stringify(content)}</div>
 }
+
+Preview.withHooks = true
+
+export default Preview

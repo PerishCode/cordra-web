@@ -4,13 +4,7 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  // routes,
   sass: {},
-  // layout: {
-  //   name: 'Cordra',
-  //   layout: 'side',
-  //   locale: false,
-  // },
   dva: {},
   locale: {},
   antd: {},

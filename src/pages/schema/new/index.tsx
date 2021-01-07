@@ -10,26 +10,22 @@ export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    __render__: ['Object'],
-    type: 'object',
-    properties: {
-      firstAuthor: {
-        __render__: ['Preview', 'Reference'],
-        type: 'string',
-        parameters: {
-          query: 'type:"Author"',
+    __render__: ['Array', 'Default', 'Table'],
+    type: 'array',
+    items: {
+      __render__: ['Object', 'TableRow'],
+      type: 'object',
+      properties: {
+        firstAuthor: {
+          __render__: ['Preview', 'Reference'],
+          type: 'string',
+          title: '第一作者',
+          parameters: {
+            query: 'type:"Author"',
+          },
         },
       },
     },
-    // __render__: ['Object'],
-    // type: 'object',
-    // properties: {
-    //   name: {
-    //     __render__: ['Input', 'Label'],
-    //     type: 'string',
-    //     title: '姓名',
-    //   },
-    // },
   })
 
   function createHandler() {

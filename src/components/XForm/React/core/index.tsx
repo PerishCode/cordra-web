@@ -15,21 +15,21 @@ export function core({ schema, addition, index }: CoreProps) {
 
   let unit: any = null
   if (Array.isArray(renderKeys))
-    renderKeys.forEach(key => {
+    renderKeys.forEach((key, i) => {
       const render: any = renders[key] || renders['Void']
-      // unit =
-      //   i + 1 !== renderKeys.length
-      //     ? render({ schema: combination, index, children: unit })
-      //     : React.createElement(
-      //         render,
-      //         { schema: combination, index, key: index },
-      //         unit
-      //       )
-      unit = React.createElement(
-        render,
-        { schema: combination, index, key: index },
-        unit
-      )
+      unit =
+        i + 1 !== renderKeys.length && !render['withHooks']
+          ? render({ schema: combination, index, children: unit })
+          : React.createElement(
+              render,
+              { schema: combination, index, key: index },
+              unit
+            )
+      // unit = React.createElement(
+      //   render,
+      //   { schema: combination, index, key: index },
+      //   unit
+      // )
     })
   return unit
 }

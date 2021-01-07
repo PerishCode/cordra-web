@@ -3,8 +3,7 @@ import { Select, Button } from 'antd'
 import { search } from '@/utils/request'
 
 const { Option } = Select
-
-export default function Reference({ schema, children }) {
+function Reference({ schema, children }) {
   const [options, setOptions] = useState([])
 
   function updateHandler() {
@@ -29,3 +28,7 @@ export default function Reference({ schema, children }) {
     </div>
   )
 }
+
+Reference.withHooks = true
+
+export default Reference

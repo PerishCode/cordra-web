@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Button } from 'antd'
 import Reference from './Reference'
 import Preview from './Preview'
+import { Table, TableRow } from './Table'
 import Test from './Test'
 import { core } from '../core'
 import './index.sass'
@@ -32,14 +33,14 @@ let renders = {
           schema.data = [JSON.parse(JSON.stringify(items))]
         }}
       >
-        ADD
+        新增
       </Button>
     )
   },
 
-  Option: ({ schema, children, index }) => (
+  Option: ({ schema, children, index }) => [
+    children,
     <div>
-      {children}
       <Button
         onClick={() => {
           schema.$.splice(
@@ -52,8 +53,8 @@ let renders = {
         ADD
       </Button>
       <Button onClick={() => schema.$.splice(index, 1)}>DEL</Button>
-    </div>
-  ),
+    </div>,
+  ],
   Info: ({ schema }) => <div>{JSON.stringify(schema)}</div>,
   Input: ({ schema }) => (
     <input
@@ -70,6 +71,8 @@ let renders = {
   Void: () => null,
   Reference,
   Preview,
+  Table,
+  TableRow,
   Test,
 }
 
