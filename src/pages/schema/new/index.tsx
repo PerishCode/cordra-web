@@ -10,10 +10,19 @@ export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    __render__: 'Table',
-    type: 'array',
-    items: {
-      $ref: 'dingling',
+    type: 'object',
+    properties: {
+      name: {
+        __render__: ['Input'],
+        type: 'string',
+        title: 'Name',
+        // cordra: {
+        //   preview: {
+        //     showInPreview: true,
+        //     isPrimary: true,
+        //   },
+        // },
+      },
     },
   })
 
