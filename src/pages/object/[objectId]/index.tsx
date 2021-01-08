@@ -25,16 +25,16 @@ export default function Page({
 
   useEffect(() => {
     getObjectById(actualId, 'full').then(({ type, content }) =>
-      getSchemaByTypeName(type).then(schema =>
-        setSchema(combineFormDataAndSchema(schemaEnlarge(schema), content))
-      )
+      getSchemaByTypeName(type)
+        .then(schemaEnlarge)
+        .then(result => setSchema(combineFormDataAndSchema(result, content)))
     )
   }, [])
 
   function storeHandler() {
-    updateObjectById(actualId, formData).then(() =>
-      message.success('保存成功', 1)
-    )
+    updateObjectById(actualId, formData)
+      .then(() => message.success('保存成功', 1))
+      .catch(console.error)
   }
 
   return (
@@ -43,7 +43,6 @@ export default function Page({
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
-          // transformer={}
         />
       </Card>
       <Card title="表单数据预览" className="formdata">

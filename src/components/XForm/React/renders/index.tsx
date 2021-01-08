@@ -30,10 +30,6 @@ let renders = {
       <Button
         onClick={() => {
           schema.data = [JSON.parse(JSON.stringify(items))]
-
-          console.log(schema)
-
-          // console.log(schema)
         }}
       >
         新增

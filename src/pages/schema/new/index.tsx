@@ -12,7 +12,9 @@ export default function Page() {
   const [schema, setSchema] = useState({
     __render__: 'Table',
     type: 'array',
-    items: '$dingling',
+    items: {
+      $ref: 'dingling',
+    },
   })
 
   function createHandler() {

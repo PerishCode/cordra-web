@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from 'antd'
+import { history } from 'umi'
 import { Card, JSONEditor, XForm } from '@/components'
 import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
-import {
-  createObjectByTypeName,
-  getSchemaByTypeName,
-  updateSchema,
-} from '@/utils/request'
+import { createObjectByTypeName, getSchemaByTypeName } from '@/utils/request'
 import './index.sass'
-import { history } from 'umi'
 
 export default function Page({
   match: {
@@ -18,15 +14,15 @@ export default function Page({
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState(null)
 
+  useEffect(() => {
+    getSchemaByTypeName(type).then(setSchema)
+  }, [])
+
   function createHandler() {
     createObjectByTypeName(type, formData)
       .then(({ id }) => history.push('/object/' + id.replaceAll('/', '.')))
       .catch(console.error)
   }
-
-  useEffect(() => {
-    getSchemaByTypeName(type).then(setSchema)
-  }, [])
 
   return (
     <div className="page object-new container">

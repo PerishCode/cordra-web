@@ -9,7 +9,6 @@ export function parseFormDataFromSchema(source) {
     Object.keys(from).forEach(k => {
       result[k] = parseFormDataFromSchema(from[k])
     })
-
     return result
   }
 
@@ -41,10 +40,8 @@ const parsers = {
   array: schema =>
     new Promise((resolve, reject) => {
       if (!schema['__render__']) schema['__render__'] = []
-
       if (typeof schema['__render__'] === 'string')
         schema['__render__'] = [schema['__render__']]
-
       if (schema['__render__'].findIndex(k => k === 'Array') < 0)
         schema['__render__'].splice(0, 0, 'Array', 'Default')
 
@@ -76,21 +73,17 @@ const parsers = {
   string: schema =>
     new Promise((resolve, reject) => {
       if (schema['__link__']) schema['__render__'] = ['Reference']
-
       resolve(schema)
     }),
 }
 
 export function schemaEnlarge(schema) {
   return new Promise((resolve, reject) => {
-    // if (schema === null) reject(new Error('schema is null'))
     if (schema === null) resolve({})
 
-    if (typeof schema === 'string') {
-      if (schema.startsWith('$')) {
-        const ref = schema.substring(1)
-        getSchemaByTypeName(ref).then(schemaEnlarge).then(resolve).catch(reject)
-      } else resolve({})
+    if (schema['$ref']) {
+      const ref = schema['$ref']
+      getSchemaByTypeName(ref).then(schemaEnlarge).then(resolve).catch(reject)
     } else {
       const parser = parsers[schema['type']]
       if (parser) parser(schema).then(resolve).catch(reject)

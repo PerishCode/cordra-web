@@ -56,7 +56,8 @@ export default function XForm({
   useEffect(() => {
     if (initialSchema !== null) {
       let actualSchema = JSON.parse(JSON.stringify(initialSchema))
-      transformer && transformer(actualSchema).then(render)
+      if (transformer) transformer(actualSchema).then(render)
+      else render(actualSchema)
     }
   }, [initialSchema, transformer])
 
