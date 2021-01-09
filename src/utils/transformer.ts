@@ -1,4 +1,4 @@
-import { getSchemaByTypeName } from './request'
+import { getSchema } from './request'
 
 export function parseFormDataFromSchema(source) {
   if (source === null || typeof source !== 'object') return source
@@ -72,7 +72,13 @@ const parsers = {
     }),
   string: schema =>
     new Promise((resolve, reject) => {
+      if (schema['__render__'] === undefined) schema['__render__'] = ['Input']
       if (schema['__link__']) schema['__render__'] = ['Reference']
+      if (
+        schema['title'] &&
+        schema['__render__'].findIndex(r => r === 'Label') === -1
+      )
+        schema['__render__'].push('Label')
       resolve(schema)
     }),
 }
@@ -83,7 +89,7 @@ export function schemaEnlarge(schema) {
 
     if (schema['$ref']) {
       const ref = schema['$ref']
-      getSchemaByTypeName(ref).then(schemaEnlarge).then(resolve).catch(reject)
+      getSchema(ref).then(schemaEnlarge).then(resolve).catch(reject)
     } else {
       const parser = parsers[schema['type']]
       if (parser) parser(schema).then(resolve).catch(reject)

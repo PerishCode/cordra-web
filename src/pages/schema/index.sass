@@ -1,11 +1,45 @@
 .page.schema-all.container
-    padding: 5px
+    padding: 20px
+    // display: grid
+    display: flex
+    // grid-template-columns: repeat(6,1fr)
+    gap: 10px
 
-    pre
-        width: 100%
+    .card
+        height: 270px
+        width: 270px
+        box-shadow: 0px 0px 50px -30px grey
 
-    .ant-collapse-extra
-        span
-            margin-left: 5px
+    .card.create
+        .body
+            display: flex
+            justify-content: center
+            align-items: center
 
+        .anticon
+            font-size: 50px
+
+    .card.schema
+        .anticon
             font-size: 16px
+            padding-right: 5px
+        .title,.options
+            height: 38px
+        .title
+            padding-top: 5px
+        .body
+            height: calc( 100% - 38px )
+            overflow: auto
+
+            &::-webkit-scrollbar    //滚动条整体部分
+                width: 3px
+                // background-color: black
+            &::-webkit-scrollbar-button   //滚动条两端的按钮
+            &::-webkit-scrollbar-track   // 外层轨道
+            &::-webkit-scrollbar-track-piece    //内层轨道，滚动条中间部分（除去）
+            &::-webkit-scrollbar-thumb //滚动条里面可以拖动的那个
+                background-color: rgba(75, 74, 74, 0.534)
+                padding-right: 1px
+                border-radius: 2px
+            &::-webkit-scrollbar-corner   //边角
+            &::-webkit-resizer   ///定义右下角拖动块的样式

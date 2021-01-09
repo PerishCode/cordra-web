@@ -1,21 +1,30 @@
 .page.schema-single.container
+    $padding: 10px
+
     height: 100%
     width: 100%
     display: grid
     grid-template-columns: repeat(2,1fr)
     grid-template-rows: repeat(2,1fr)
-    padding: 5px
+    padding: $padding
     gap: 5px
 
-    button.store
+    .card
+        box-shadow: 0px 0px 50px -25px rgba(44, 54, 80, 0.596)
+
+    .store
         position: absolute
-        right: 5px
-        top: 5px
+        right: $padding
+        top: $padding
         height: 44px
-        border: none
-        font-size: 16px
-        background-color: rgba(195, 233, 245, 0.473)
-        border-right-left-radius: 5px
+        display: flex
+        justify-content: center
+        align-items: center
+        padding-right: 5px
+        cursor: pointer
+
+        .anticon
+            font-size: 44px
 
     .editor
         grid-row: 1/2

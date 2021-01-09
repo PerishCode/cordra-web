@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import { history } from 'umi'
 import { Card, JSONEditor, XForm } from '@/components'
 import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
-import { createObjectByTypeName, getSchemaByTypeName } from '@/utils/request'
+import { createObjectByTypeName, getSchema } from '@/utils/request'
 import './index.sass'
 
 export default function Page({
@@ -15,7 +15,7 @@ export default function Page({
   const [schema, setSchema] = useState(null)
 
   useEffect(() => {
-    getSchemaByTypeName(type).then(setSchema)
+    getSchema(type).then(setSchema)
   }, [])
 
   function createHandler() {

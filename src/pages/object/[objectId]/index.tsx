@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, message } from 'antd'
-import {
-  getObjectById,
-  getSchemaByTypeName,
-  updateObjectById,
-} from '@/utils/request'
+import { getObjectById, getSchema, updateObjectById } from '@/utils/request'
 import {
   combineFormDataAndSchema,
   parseFormDataFromSchema,
@@ -25,7 +21,7 @@ export default function Page({
 
   useEffect(() => {
     getObjectById(actualId, 'full').then(({ type, content }) =>
-      getSchemaByTypeName(type)
+      getSchema(type)
         .then(schemaEnlarge)
         .then(result => setSchema(combineFormDataAndSchema(result, content)))
     )

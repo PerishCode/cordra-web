@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Button, message } from 'antd'
-import { Card, JSONEditor, XForm } from '@/components'
+import { useEffect, useState } from 'react'
+import { message } from 'antd'
+import { Card, Icon, JSONEditor, XForm } from '@/components'
 import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
-import { getSchemaByTypeName, updateSchema } from '@/utils/request'
+import { getSchema, updateSchema } from '@/utils/request'
 import './index.sass'
 
 export default function Page({
@@ -18,7 +18,7 @@ export default function Page({
   }
 
   useEffect(() => {
-    getSchemaByTypeName(type).then(setSchema)
+    getSchema(type).then(setSchema)
   }, [])
 
   return (
@@ -41,9 +41,9 @@ export default function Page({
       <Card title="表单数据预览" className="preview-formdata">
         <JSONEditor mode="view" json={formData} />
       </Card>
-      <Button className="store" onClick={storeHandler}>
-        保存
-      </Button>
+      <div className="store" onClick={storeHandler}>
+        <Icon type="iconsave" />
+      </div>
     </div>
   )
 }

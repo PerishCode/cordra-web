@@ -2,6 +2,7 @@
     border-radius: 5px
     box-shadow: 3px 3px 3px rgba(105, 104, 104, 0.336)
     background-color: rgb(255, 255, 255)
+    position: relative
 
     &>.title
         width: 100%
@@ -15,5 +16,17 @@
             padding: 0px
             width: 50%
 
+    &>.options
+        height: 44px
+        position: absolute
+        right: 5px
+        top: 0px
+        display: flex
+        justify-content: center
+        align-items: center
+
     &>.body
         height: calc( 100% - 44px )
+
+    &>.body:only-child
+        height: 100%

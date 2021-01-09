@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { createFromIconfontCN } from '@ant-design/icons'
 import { IconFontProps } from '@ant-design/icons/lib/components/IconFont'
 
 const Icon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2305986_ztay5lfmv3.js',
+  scriptUrl: '//at.alicdn.com/t/font_2305986_9z05q865927.js',
 })
 
 export default function (props: IconFontProps) {

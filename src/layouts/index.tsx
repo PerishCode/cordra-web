@@ -16,10 +16,12 @@ export default function ({ children }) {
         collapsible
         trigger={null}
         collapsed={collapse}
+        width="170px"
         collapsedWidth="50px"
       >
         <div className="logo" onClick={() => setCollapse(!collapse)}>
           <Icon type="icongem" />
+          <span className="text">DB Manager</span>
         </div>
 
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
@@ -28,10 +30,14 @@ export default function ({ children }) {
             icon={<Icon type="iconauthor" />}
             onClick={() => history.push('/author')}
           >
-            Author
+            作者信息管理
           </Menu.Item>
-          <Menu.Item key="Paper" icon={<Icon type="iconpaper" />}>
-            Paper
+          <Menu.Item
+            key="Paper"
+            icon={<Icon type="iconpaper" />}
+            onClick={() => history.push('/paper')}
+          >
+            论文管理
           </Menu.Item>
 
           {/* <SubMenu key="sub1" icon={<Icon type="iconedit" />} title="Author">

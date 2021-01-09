@@ -62,8 +62,8 @@ let renders = {
       onChange={e => (schema.data = e.target.value)}
     />
   ),
-  Label: ({ children, schema: { title } }) => (
-    <div className="XForm-Label">
+  Label: ({ children, schema: { title }, index }) => (
+    <div className="XForm-Label" key={index}>
       <span className="title">{title}</span>
       <span className="content">{children}</span>
     </div>

@@ -18,9 +18,18 @@ export function getAllSchemas() {
   }).then(res => res.json())
 }
 
-export function getSchemaByTypeName(type) {
+export function getSchema(type) {
   return fetch('/cordra/schemas/' + type, {
     method: 'get',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+  }).then(res => res.json())
+}
+
+export function deleteSchema(type) {
+  return fetch('/cordra/schemas/' + type, {
+    method: 'delete',
     headers: new Headers({
       Authorization: 'Basic ' + btoa('admin:king'),
     }),
