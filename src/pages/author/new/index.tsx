@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { XForm } from '@/components'
-import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
+import { parseFormDataFromSchema } from '@/utils/transformer'
+import { edit } from '@/utils/augmenter'
 import { getSchema } from '@/utils/request'
 import './index.sass'
 
@@ -17,7 +18,7 @@ export default function Page() {
       <XForm
         schema={schema}
         onChange={d => setFormData(parseFormDataFromSchema(d))}
-        transformer={schemaEnlarge}
+        transformer={edit}
       />
     </div>
   )

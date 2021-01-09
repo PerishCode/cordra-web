@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Button, message } from 'antd'
 import { history } from 'umi'
-import { JSONEditor, XForm, Card } from '@/components'
-import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
+import { JSONEditor, XForm, Card, Icon } from '@/components'
+import { parseFormDataFromSchema } from '@/utils/transformer'
+import { edit } from '@/utils/augmenter'
 import { createSchema } from '@/utils/request'
 import './index.sass'
 
@@ -52,19 +53,26 @@ export default function Page() {
           hideMenu={true}
         />
       </Card>
-      <Card title="表单预览" className="preview-form">
-        <XForm
-          schema={schema}
-          onChange={d => setFormData(parseFormDataFromSchema(d))}
-          transformer={schemaEnlarge}
-        />
-      </Card>
       <Card title="表单数据预览" className="preview-formdata">
         <JSONEditor mode="view" json={formData} />
       </Card>
-      <Button className="create" onClick={createHandler}>
-        确认创建
-      </Button>
+      <Card
+        title="表单预览"
+        className="preview-form"
+        options={
+          <Icon
+            type="icontemplate"
+            className="create"
+            onClick={createHandler}
+          />
+        }
+      >
+        <XForm
+          schema={schema}
+          onChange={d => setFormData(parseFormDataFromSchema(d))}
+          transformer={edit}
+        />
+      </Card>
     </div>
   )
 }

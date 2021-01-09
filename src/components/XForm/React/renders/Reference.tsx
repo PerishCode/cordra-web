@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Select, Button } from 'antd'
 import { getObjectById, search } from '@/utils/request'
 
 const { Option } = Select
-function Reference({ schema, children }) {
+
+function Reference({ schema }) {
   const [options, setOptions] = useState([])
   const [content, setContent] = useState(null)
   const id = schema.data
 
   useEffect(() => {
-    if (!id) return
-    getObjectById(id, 'full').then(({ type, content }) => setContent(content))
+    id &&
+      getObjectById(id, 'full').then(({ type, content }) => setContent(content))
   }, [id])
 
   function updateHandler() {

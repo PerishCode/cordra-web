@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Button } from 'antd'
+import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, JSONEditor, XForm } from '@/components'
-import { parseFormDataFromSchema, schemaEnlarge } from '@/utils/transformer'
+import { Card, Icon, JSONEditor, XForm } from '@/components'
+import { parseFormDataFromSchema } from '@/utils/transformer'
+import { edit } from '@/utils/augmenter'
 import { createObjectByTypeName, getSchema } from '@/utils/request'
 import './index.sass'
 
@@ -26,19 +26,26 @@ export default function Page({
 
   return (
     <div className="page object-new container">
-      <Card title="表单填写" className="form">
+      <Card
+        title="表单填写"
+        className="form"
+        options={
+          <Icon
+            type="icontemplate"
+            className="create"
+            onClick={createHandler}
+          />
+        }
+      >
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
-          transformer={schemaEnlarge}
+          transformer={edit}
         />
       </Card>
       <Card title="表单数据预览" className="formdata">
         <JSONEditor mode="view" json={formData} />
       </Card>
-      <Button className="create" onClick={createHandler}>
-        创建
-      </Button>
     </div>
   )
 }

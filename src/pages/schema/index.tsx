@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Collapse, message } from 'antd'
 import { history } from 'umi'
-import { Icon, Card } from '@/components'
+import { Icon, Card, XForm } from '@/components'
 import { deleteSchema, getAllSchemas } from '@/utils/request'
+import { view } from '@/utils/augmenter'
 import './index.sass'
 
 const { Panel } = Collapse
@@ -28,22 +29,19 @@ export default function Page() {
     )
   }, [])
 
-  function createClickHandler(e) {
+  function createClickHandler() {
     history.push('/object/new/' + this)
-    e.stopPropagation()
   }
 
-  function editClickHandler(e) {
+  function editClickHandler() {
     history.push('/schema/' + this)
-    e.stopPropagation()
   }
 
-  function deleteClickHandler(e) {
+  function deleteClickHandler() {
     deleteSchema(this).then(() => {
       message.success('删除成功', 1)
       setSchemas(schemas.filter(([k]) => k !== this))
     })
-    e.stopPropagation()
   }
 
   return (
@@ -65,27 +63,10 @@ export default function Page() {
             </>
           }
         >
+          {/* <XForm schema={schema} transformer={view} /> */}
           <pre>{JSON.stringify(schema, null, 2)}</pre>
         </Card>
       ))}
-
-      {/* <Collapse>
-        {schemas.map(([k, schema]) => (
-          <Panel
-            key={k}
-            header={k}
-            extra={
-              <div>
-                <Icon type="iconcreate" onClick={createClickHandler.bind(k)} />
-                <Icon type="icondelete" onClick={deleteClickHandler.bind(k)} />
-                <Icon type="iconedit" onClick={editClickHandler.bind(k)} />
-              </div>
-            }
-          >
-            <pre>{JSON.stringify(schema, null, 2)}</pre>
-          </Panel>
-        ))}
-      </Collapse> */}
     </div>
   )
 }

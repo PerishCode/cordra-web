@@ -30,7 +30,7 @@ export default function ({ children }) {
             icon={<Icon type="iconauthor" />}
             onClick={() => history.push('/author')}
           >
-            作者信息管理
+            作者管理
           </Menu.Item>
           <Menu.Item
             key="Paper"
@@ -38,6 +38,20 @@ export default function ({ children }) {
             onClick={() => history.push('/paper')}
           >
             论文管理
+          </Menu.Item>
+          <Menu.Item
+            key="Schema"
+            icon={<Icon type="iconschema" />}
+            onClick={() => history.push('/schema')}
+          >
+            Schema管理
+          </Menu.Item>
+          <Menu.Item
+            key="Object"
+            icon={<Icon type="iconobject" />}
+            onClick={() => history.push('/object')}
+          >
+            数字对象管理
           </Menu.Item>
 
           {/* <SubMenu key="sub1" icon={<Icon type="iconedit" />} title="Author">

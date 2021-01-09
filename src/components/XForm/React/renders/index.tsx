@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
 import { Button } from 'antd'
 import Reference from './Reference'
 import Table from './Table'
-import Test from './Test'
+import Input from './Input'
+import Label from './Label'
+import Format from './Format'
 import { core } from '../core'
 import './index.sass'
 
@@ -23,7 +24,7 @@ let renders = {
       ? data.map((d, index) => core({ schema: d, index }))
       : null
   },
-  Default: ({ schema, children, index }) => {
+  Default: ({ schema, children }) => {
     const { data, items } = schema
     if (Array.isArray(data) && data.length) return children
     return (
@@ -36,42 +37,12 @@ let renders = {
       </Button>
     )
   },
-
-  Option: ({ schema, children, index }) => [
-    children,
-    <div>
-      <Button
-        onClick={() => {
-          schema.$.splice(
-            index + 1,
-            0,
-            JSON.parse(JSON.stringify(schema.$.$.items))
-          )
-        }}
-      >
-        ADD
-      </Button>
-      <Button onClick={() => schema.$.splice(index, 1)}>DEL</Button>
-    </div>,
-  ],
-  Info: ({ schema }) => <div>{JSON.stringify(schema)}</div>,
-  Input: ({ schema, index }) => (
-    <input
-      key={index}
-      value={schema.data || ''}
-      onChange={e => (schema.data = e.target.value)}
-    />
-  ),
-  Label: ({ children, schema: { title }, index }) => (
-    <div className="XForm-Label" key={index}>
-      <span className="title">{title}</span>
-      <span className="content">{children}</span>
-    </div>
-  ),
   Void: () => null,
+  Input,
+  Label,
   Reference,
+  Format,
   Table,
-  Test,
 }
 
 export default renders

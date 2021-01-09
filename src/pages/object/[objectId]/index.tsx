@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button, message } from 'antd'
+import { message } from 'antd'
 import { getObjectById, getSchema, updateObjectById } from '@/utils/request'
 import {
   combineFormDataAndSchema,
   parseFormDataFromSchema,
-  schemaEnlarge,
 } from '@/utils/transformer'
-import { XForm, Card, JSONEditor } from '@/components'
+import { edit } from '@/utils/augmenter'
+import { XForm, Card, JSONEditor, Icon } from '@/components'
 import './index.sass'
 
 export default function Page({
@@ -22,7 +22,7 @@ export default function Page({
   useEffect(() => {
     getObjectById(actualId, 'full').then(({ type, content }) =>
       getSchema(type)
-        .then(schemaEnlarge)
+        .then(edit)
         .then(result => setSchema(combineFormDataAndSchema(result, content)))
     )
   }, [])
@@ -35,7 +35,13 @@ export default function Page({
 
   return (
     <div className="page object-single container">
-      <Card title="表单填写" className="form">
+      <Card
+        title="表单填写"
+        className="form"
+        options={
+          <Icon className="store" type="iconsave" onClick={storeHandler} />
+        }
+      >
         <XForm
           schema={schema}
           onChange={d => setFormData(parseFormDataFromSchema(d))}
@@ -44,9 +50,6 @@ export default function Page({
       <Card title="表单数据预览" className="formdata">
         <JSONEditor mode="view" json={formData} />
       </Card>
-      <Button className="store" onClick={storeHandler}>
-        保存
-      </Button>
     </div>
   )
 }

@@ -89,3 +89,12 @@ export function updateObjectById(id, content) {
     body: JSON.stringify(content),
   }).then(res => res.json())
 }
+
+export function deleteObjectById(id) {
+  return fetch('/cordra/objects/' + id, {
+    method: 'delete',
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa('admin:king'),
+    }),
+  }).then(res => res.json())
+}
