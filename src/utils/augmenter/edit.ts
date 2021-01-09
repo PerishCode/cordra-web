@@ -36,18 +36,18 @@ const parsers = {
     new Promise((resolve, reject) => {
       if (schema['__render__'] === undefined) schema['__render__'] = ['Input']
       if (schema['__link__']) schema['__render__'] = ['Reference']
-      if (
-        schema['title'] &&
-        schema['__render__'].findIndex(r => r === 'Label') === -1
-      )
-        schema['__render__'].push('Label')
+      //   if (
+      //     schema['title'] &&
+      //     schema['__render__'].findIndex(r => r === 'Label') === -1
+      //   )
+      //     schema['__render__'].push('Label')
       resolve(schema)
     }),
 }
 
 export default function processor(schema) {
   return new Promise((resolve, reject) => {
-    if (schema === null) resolve({})
+    if (schema === null || schema === undefined) resolve({})
 
     if (schema['$ref']) {
       const ref = schema['$ref']
