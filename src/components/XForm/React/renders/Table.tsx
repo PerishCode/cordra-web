@@ -27,6 +27,15 @@ function headParser(schema) {
 
 export default function Table({ schema, children }) {
   if (!Array.isArray(children)) return children
+
+  function createHandler() {
+    schema.data.splice(this + 1, 0, JSON.parse(JSON.stringify(schema.items)))
+  }
+
+  function deleteHandler() {
+    schema.data.splice(this, 1)
+  }
+
   return (
     <table className="XForm-Table">
       <thead>{headParser(schema)}</thead>
@@ -37,18 +46,8 @@ export default function Table({ schema, children }) {
               <td key={j}>{cell}</td>
             ))}
             <td>
-              <Button
-                onClick={() => {
-                  schema.data.splice(
-                    index + 1,
-                    0,
-                    JSON.parse(JSON.stringify(schema.items))
-                  )
-                }}
-              >
-                +
-              </Button>
-              <Button onClick={() => schema.data.splice(index, 1)}>-</Button>
+              <Button onClick={createHandler.bind(index)}>+</Button>
+              <Button onClick={deleteHandler.bind(index)}>-</Button>
             </td>
           </tr>
         ))}

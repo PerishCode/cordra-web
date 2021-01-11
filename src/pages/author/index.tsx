@@ -1,28 +1,22 @@
 import { useEffect, useState } from 'react'
-import { createObjectByTypeName, deleteObjectById, search } from '@/utils/request'
-import {} from '@/utils/transformer'
-import { Card, Icon } from '@/components'
+import { createObjectByTypeName, deleteObjectById, getSchema, search } from '@/utils/request'
+import { combineFormDataAndSchema } from '@/utils/transformer'
+import { Card, Icon, XForm } from '@/components'
 import './index.sass'
-
-// function MiniForm({ author: { id, content }, onSave }) {
-//   const [editable, setEditable] = useState(false)
-
-//   return (
-//     <Card title={id} className="thumbnail" options={editable ? <Icon type="iconsave" /> : <Icon type="iconedit" />}>
-//       {/* {JSON.stringify(a)} */}
-//       {/* {id} */}
-//       {JSON.stringify(content)}
-//     </Card>
-//   )
-// }
 
 export default function Page() {
   const [authors, setAuthors] = useState<any>([])
+  const [schema, setSchema] = useState<any>({})
 
   useEffect(() => {
-    search({
-      query: 'type:"Author"',
-    }).then(({ results }) => setAuthors(results))
+    getSchema('Author').then(schema =>
+      search({
+        query: 'type:"Author"',
+      }).then(({ results }) => {
+        setAuthors(results)
+        setSchema(schema)
+      })
+    )
   }, [])
 
   function createHandler() {
@@ -30,7 +24,7 @@ export default function Page() {
   }
 
   function deleteHandler() {
-    deleteObjectById(this).then(res => setAuthors(authors.filter(a => a.id !== this)))
+    deleteObjectById(this).then(() => setAuthors(authors.filter(a => a.id !== this)))
   }
 
   return (
@@ -51,7 +45,7 @@ export default function Page() {
               </>
             }
           >
-            {JSON.stringify(a.content)}
+            <XForm schema={combineFormDataAndSchema(schema, a.content)} />
           </Card>
         ))}
       </Card>
