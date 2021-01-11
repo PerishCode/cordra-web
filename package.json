@@ -11,7 +11,8 @@
   "prettier": {
     "semi": false,
     "arrowParens": "avoid",
-    "singleQuote": true
+    "singleQuote": true,
+    "printWidth": 120
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

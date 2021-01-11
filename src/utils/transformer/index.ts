@@ -20,15 +20,10 @@ export function parseFormDataFromSchema(source) {
 export function combineFormDataAndSchema(schema, formData) {
   if (schema['properties']) {
     Object.keys(schema.properties).forEach(k => {
-      schema.properties[k] = combineFormDataAndSchema(
-        schema.properties[k],
-        formData[k]
-      )
+      schema.properties[k] = combineFormDataAndSchema(schema.properties[k], formData[k] || {})
     })
   } else if (schema['items']) {
-    schema['data'] = formData.map(d =>
-      combineFormDataAndSchema(JSON.parse(JSON.stringify(schema['items'])), d)
-    )
+    schema['data'] = (formData || []).map(d => combineFormDataAndSchema(JSON.parse(JSON.stringify(schema['items'])), d))
   } else schema['data'] = formData
 
   return schema
