@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
+import { message } from 'antd'
+import { history } from 'umi'
 import { createObjectByTypeName, deleteObjectById, getSchema, search } from '@/utils/request'
 import { combineFormDataAndSchema } from '@/utils/transformer'
+import { view } from '@/utils/augmenter'
 import { Card, Icon, XForm } from '@/components'
 import './index.sass'
 
@@ -20,11 +23,21 @@ export default function Page() {
   }, [])
 
   function createHandler() {
-    createObjectByTypeName('Author', {}).then(res => setAuthors(authors.concat([res])))
+    createObjectByTypeName('Author', {}).then(res => {
+      message.success('创建成功', 1)
+      setAuthors(authors.concat([res]))
+    })
   }
 
   function deleteHandler() {
-    deleteObjectById(this).then(() => setAuthors(authors.filter(a => a.id !== this)))
+    deleteObjectById(this).then(() => {
+      message.success('删除成功', 1)
+      setAuthors(authors.filter(a => a.id !== this))
+    })
+  }
+
+  function editHandler() {
+    history.push('/author/' + this.replaceAll('/', '.'))
   }
 
   return (
@@ -35,17 +48,21 @@ export default function Page() {
         </Card>
         {authors.map(a => (
           <Card
-            title={a.id}
+            title={a.content.name || a.id}
             key={a.id}
             className="thumbnail"
             options={
               <>
-                <Icon type="iconedit" />
+                <Icon type="iconedit" onClick={editHandler.bind(a.id)} />
                 <Icon type="icondelete" onClick={deleteHandler.bind(a.id)} />
               </>
             }
           >
-            <XForm schema={combineFormDataAndSchema(schema, a.content)} />
+            <XForm
+              schema={combineFormDataAndSchema(JSON.parse(JSON.stringify(schema)), a.content)}
+              transformer={view}
+            />
+            {/* <pre>{JSON.stringify(combineFormDataAndSchema(schema, a.content), null, 2)}</pre> */}
           </Card>
         ))}
       </Card>

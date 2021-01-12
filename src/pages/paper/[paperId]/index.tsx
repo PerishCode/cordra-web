@@ -8,10 +8,10 @@ import './index.sass'
 
 export default function Page({
   match: {
-    params: { authorId },
+    params: { paperId },
   },
 }) {
-  const realId = authorId.replaceAll('.', '/')
+  const realId = paperId.replaceAll('.', '/')
   const [formData, setFormData] = useState<any>(null)
   const [schema, setSchema] = useState<any>(null)
 
@@ -30,8 +30,8 @@ export default function Page({
   }
 
   return (
-    <div className="page author-single container">
-      <Card title="作者信息管理" className="management" options={<Icon type="iconsave" onClick={saveHandler} />}>
+    <div className="page paper-single container">
+      <Card title="论文信息管理" className="management" options={<Icon type="iconsave" onClick={saveHandler} />}>
         <XForm schema={schema} onChange={d => setFormData(parseFormDataFromSchema(d))} />
       </Card>
     </div>

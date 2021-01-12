@@ -4,6 +4,7 @@ import Table from './Table'
 import Input from './Input'
 import Label from './Label'
 import Format from './Format'
+import Preview from './Preview'
 import { core } from '../core'
 import './index.sass'
 
@@ -20,9 +21,7 @@ let renders = {
     return result
   },
   Array: ({ schema: { data } }) => {
-    return Array.isArray(data)
-      ? data.map((d, index) => core({ schema: d, index }))
-      : null
+    return Array.isArray(data) ? data.map((d, index) => core({ schema: d, index })) : null
   },
   Default: ({ schema, children }) => {
     const { data, items } = schema
@@ -43,6 +42,7 @@ let renders = {
   Reference,
   Format,
   Table,
+  Preview,
 }
 
 export default renders

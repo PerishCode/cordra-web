@@ -1,11 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  reactive,
-  observeGlobal,
-  combine,
-  unobserveGlobal,
-} from '@/components/XForm/reactive/core'
+import { reactive, observeGlobal, combine, unobserveGlobal } from '@/components/XForm/reactive/core'
 import { CoreProps, XFormProps, XSchema } from './types'
 import renders from '../renders'
 
@@ -19,21 +14,13 @@ export function core({ schema, addition, index }: CoreProps) {
       const render: any = renders[key] || renders['Void']
       unit = !render['withHooks']
         ? render({ schema: combination, index, children: unit })
-        : React.createElement(
-            render,
-            { schema: combination, index, key: index },
-            unit
-          )
+        : React.createElement(render, { schema: combination, index, key: index }, unit)
     })
 
   return unit
 }
 
-export default function XForm({
-  schema: initialSchema,
-  onChange,
-  transformer,
-}: XFormProps) {
+export default function XForm({ schema: initialSchema, onChange, transformer }: XFormProps) {
   const container = useRef()
   const reactionRef = useRef(null)
 
@@ -42,12 +29,14 @@ export default function XForm({
     const reaction = reactionRef.current
 
     onChange && onChange(reaction)
-    reaction &&
-      ReactDOM.render(core({ schema: reaction }), container.current as any)
+    reaction && ReactDOM.render(core({ schema: reaction }), container.current as any)
   }
 
   useEffect(() => {
-    const emptyRender = () => render()
+    function emptyRender() {
+      render()
+    }
+
     observeGlobal(emptyRender)
     render()
     return () => unobserveGlobal(emptyRender)
@@ -56,7 +45,11 @@ export default function XForm({
   useEffect(() => {
     if (initialSchema !== null) {
       let actualSchema = JSON.parse(JSON.stringify(initialSchema))
-      if (transformer) transformer(actualSchema).then(render)
+      if (transformer)
+        transformer(actualSchema).then(res => {
+          // console.log(res)
+          render(res)
+        })
       else render(actualSchema)
     }
   }, [initialSchema, transformer])

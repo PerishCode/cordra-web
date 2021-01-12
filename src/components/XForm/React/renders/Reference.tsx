@@ -5,17 +5,16 @@ import { getObjectById, search } from '@/utils/request'
 const { Option } = Select
 
 function Reference({ schema }) {
-  const [options, setOptions] = useState([])
+  const [options, setOptions] = useState<any>([])
   const [content, setContent] = useState(null)
   const id = schema.data
 
   useEffect(() => {
-    id &&
-      getObjectById(id, 'full').then(({ type, content }) => setContent(content))
+    id && getObjectById(id, 'full').then(({ type, content }) => setContent(content))
   }, [id])
 
   function updateHandler() {
-    search(schema['__link__']).then(({ results }) => setOptions(results))
+    search(schema['__link__']).then(({ results }) => Array.isArray(results) && setOptions(results))
   }
 
   useEffect(() => {
@@ -27,7 +26,7 @@ function Reference({ schema }) {
       <Select value={id} onChange={v => (schema.data = v)}>
         {options.map((o: any, i) => (
           <Option key={i} value={o.id}>
-            {o.id}
+            {o.content.name || o.id}
           </Option>
         ))}
       </Select>

@@ -11,7 +11,18 @@ export default function Page() {
   const [type, setType] = useState('')
   const [formData, setFormData] = useState(null)
   const [schema, setSchema] = useState({
-    type: 'array',
+    type: 'object',
+    properties: {
+      DOI: {
+        type: 'string',
+      },
+      FirstAuthor: {
+        type: 'string',
+        __link__: {
+          query: 'type:"Author"',
+        },
+      },
+    },
   })
 
   function createHandler() {
@@ -33,12 +44,7 @@ export default function Page() {
         }
         className="editor"
       >
-        <JSONEditor
-          mode="code"
-          json={schema}
-          onChange={setSchema}
-          hideMenu={true}
-        />
+        <JSONEditor mode="code" json={schema} onChange={setSchema} hideMenu={true} />
       </Card>
       <Card title="表单数据预览" className="preview-formdata">
         <JSONEditor mode="view" json={formData} />
@@ -46,19 +52,9 @@ export default function Page() {
       <Card
         title="表单预览"
         className="preview-form"
-        options={
-          <Icon
-            type="icontemplate"
-            className="create"
-            onClick={createHandler}
-          />
-        }
+        options={<Icon type="icontemplate" className="create" onClick={createHandler} />}
       >
-        <XForm
-          schema={schema}
-          onChange={d => setFormData(parseFormDataFromSchema(d))}
-          transformer={edit}
-        />
+        <XForm schema={schema} onChange={d => setFormData(parseFormDataFromSchema(d))} transformer={edit} />
       </Card>
     </div>
   )
