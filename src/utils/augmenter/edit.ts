@@ -15,8 +15,9 @@ const parsers = {
     new Promise(resolve => {
       if (schema['__render__'].findIndex(k => k === 'Object') < 0) schema['__render__'].splice(0, 0, 'Object')
       if (schema['properties'] === undefined) schema['properties'] = {}
-      Promise.all(Object.keys(schema.properties).map(k => processor(schema.properties[k]))).then(results => {
-        Object.keys(schema.properties).forEach((k, i) => (schema.properties[k] = results[i]))
+      const validKeys = Object.keys(schema.properties).filter(k => k !== 'id')
+      Promise.all(validKeys.map(k => processor(schema.properties[k]))).then(results => {
+        validKeys.forEach((k, i) => (schema.properties[k] = results[i]))
         resolve(schema)
       })
     }),

@@ -1,11 +1,50 @@
 import { useEffect, useState } from 'react'
-import { message } from 'antd'
-import { history } from 'umi'
-import { createObjectByTypeName, deleteObjectById, getSchema, search } from '@/utils/request'
-import { combineFormDataAndSchema } from '@/utils/transformer'
-import { view } from '@/utils/augmenter'
-import { Card, Icon, XForm } from '@/components'
+import { message, Table, Select } from 'antd'
+import {
+  createObjectByTypeName,
+  deleteObjectById,
+  getObjectById,
+  getSchema,
+  search,
+  updateObjectById,
+} from '@/utils/request'
+import { Card, Icon } from '@/components'
 import './index.sass'
+
+const { Option } = Select
+
+function Reference({ value, onChange }) {
+  const [options, setOptions] = useState<any>([])
+  const [content, setContent] = useState(null)
+  const id = value
+
+  useEffect(() => {
+    id && getObjectById(id, 'full').then(({ content }) => setContent(content))
+  }, [id])
+
+  function updateHandler() {
+    search({
+      query: 'type:"Author"',
+    }).then(({ results }) => Array.isArray(results) && setOptions(results))
+  }
+
+  useEffect(() => {
+    updateHandler()
+  }, [])
+
+  return (
+    <span>
+      <Select value={id} onChange={onChange} showArrow={false}>
+        {options.map((o: any, i) => (
+          <Option key={i} value={o.id}>
+            {o.content.name || o.id}
+          </Option>
+        ))}
+      </Select>
+      <Icon type="iconrefresh" onClick={updateHandler} />
+    </span>
+  )
+}
 
 export default function Page() {
   const [papers, setPapers] = useState<any>([])
@@ -29,42 +68,80 @@ export default function Page() {
     })
   }
 
-  function deleteHandler() {
-    deleteObjectById(this).then(() => {
+  function deleteHandler(id) {
+    deleteObjectById(id).then(() => {
       message.success('删除成功', 1)
-      setPapers(papers.filter(a => a.id !== this))
+      setPapers(papers.filter(a => a.id !== id))
     })
   }
 
-  function editHandler() {
-    history.push('/paper/' + this.replaceAll('/', '.'))
+  function saveHandler(index) {
+    updateObjectById(papers[index].id, papers[index].content).then(() => {
+      message.success('更新成功', 1)
+    })
   }
 
   return (
     <div className="page paper container">
-      <Card className="papers" title="论文管理">
-        <Card className="thumbnail create">
-          <Icon type="iconcreate" onClick={createHandler} />
-        </Card>
-        {papers.map(a => (
-          <Card
-            title={a.content.title || a.id}
-            key={a.id}
-            className="thumbnail"
-            options={
-              <>
-                <Icon type="iconedit" onClick={editHandler.bind(a.id)} />
-                <Icon type="icondelete" onClick={deleteHandler.bind(a.id)} />
-              </>
-            }
-          >
-            <XForm
-              schema={combineFormDataAndSchema(JSON.parse(JSON.stringify(schema)), a.content)}
-              transformer={view}
-            />
-            {/* <pre>{JSON.stringify(combineFormDataAndSchema(schema, a.content), null, 2)}</pre> */}
-          </Card>
-        ))}
+      <Card
+        className="papers"
+        title="论文管理"
+        options={<Icon type="iconcreate" className="create" onClick={createHandler} />}
+      >
+        <Table
+          className="preview"
+          columns={[
+            {
+              title: '论文标题',
+              dataIndex: 'title',
+              render: (value, _, index) => (
+                <input
+                  value={value}
+                  onChange={e => {
+                    papers[index].content.title = e.target.value
+                    setPapers(papers)
+                  }}
+                />
+              ),
+            },
+            {
+              title: 'DOI号',
+              dataIndex: 'DOI',
+              render: (value, _, index) => (
+                <input
+                  value={value}
+                  onChange={e => {
+                    papers[index].content.DOI = e.target.value
+                    setPapers(papers)
+                  }}
+                />
+              ),
+            },
+            {
+              title: '第一作者',
+              dataIndex: 'FirstAuthor',
+              render: (value, _, index) => (
+                <Reference
+                  value={value}
+                  onChange={v => {
+                    papers[index].content.FirstAuthor = v
+                    setPapers(papers)
+                  }}
+                />
+              ),
+            },
+            {
+              title: '操作',
+              render: (_, record, index) => (
+                <>
+                  <Icon type="iconshanchu" onClick={() => deleteHandler(record.key)} />
+                  <Icon type="iconyishen" onClick={() => saveHandler(index)} />
+                </>
+              ),
+            },
+          ]}
+          dataSource={papers.map(a => ({ ...a.content, key: a.id }))}
+        />
       </Card>
     </div>
   )

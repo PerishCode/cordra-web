@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
-import { message } from 'antd'
-import { history } from 'umi'
-import { createObjectByTypeName, deleteObjectById, getSchema, search } from '@/utils/request'
-import { combineFormDataAndSchema } from '@/utils/transformer'
-import { view } from '@/utils/augmenter'
-import { Card, Icon, XForm } from '@/components'
+import { message, Table } from 'antd'
+import { createObjectByTypeName, deleteObjectById, getSchema, search, updateObjectById } from '@/utils/request'
+import { Card, Icon } from '@/components'
 import './index.sass'
 
 export default function Page() {
@@ -29,42 +26,67 @@ export default function Page() {
     })
   }
 
-  function deleteHandler() {
-    deleteObjectById(this).then(() => {
+  function deleteHandler(id) {
+    deleteObjectById(id).then(() => {
       message.success('删除成功', 1)
-      setAuthors(authors.filter(a => a.id !== this))
+      setAuthors(authors.filter(a => a.id !== id))
     })
   }
 
-  function editHandler() {
-    history.push('/author/' + this.replaceAll('/', '.'))
+  function saveHandler(index) {
+    updateObjectById(authors[index].id, authors[index].content).then(() => {
+      message.success('更新成功', 1)
+    })
   }
 
   return (
     <div className="page author container">
-      <Card className="authors" title="作者管理">
-        <Card className="thumbnail create">
-          <Icon type="iconcreate" onClick={createHandler} />
-        </Card>
-        {authors.map(a => (
-          <Card
-            title={a.content.name || a.id}
-            key={a.id}
-            className="thumbnail"
-            options={
-              <>
-                <Icon type="iconedit" onClick={editHandler.bind(a.id)} />
-                <Icon type="icondelete" onClick={deleteHandler.bind(a.id)} />
-              </>
-            }
-          >
-            <XForm
-              schema={combineFormDataAndSchema(JSON.parse(JSON.stringify(schema)), a.content)}
-              transformer={view}
-            />
-            {/* <pre>{JSON.stringify(combineFormDataAndSchema(schema, a.content), null, 2)}</pre> */}
-          </Card>
-        ))}
+      <Card
+        className="authors"
+        title="作者管理"
+        options={<Icon type="iconcreate" className="create" onClick={createHandler} />}
+      >
+        <Table
+          className="preview"
+          columns={[
+            {
+              title: '姓名',
+              dataIndex: 'name',
+              render: (value, _, index) => (
+                <input
+                  value={value}
+                  onChange={e => {
+                    authors[index].content.name = e.target.value
+                    setAuthors(authors)
+                  }}
+                />
+              ),
+            },
+            {
+              title: '单位',
+              dataIndex: 'organization',
+              render: (value, _, index) => (
+                <input
+                  value={value}
+                  onChange={e => {
+                    authors[index].content.organization = e.target.value
+                    setAuthors(authors)
+                  }}
+                />
+              ),
+            },
+            {
+              title: '操作',
+              render: (_, record, index) => (
+                <>
+                  <Icon type="iconshanchu" onClick={() => deleteHandler(record.key)} />
+                  <Icon type="iconyishen" onClick={() => saveHandler(index)} />
+                </>
+              ),
+            },
+          ]}
+          dataSource={authors.map(a => ({ ...a.content, key: a.id }))}
+        />
       </Card>
     </div>
   )
