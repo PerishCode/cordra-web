@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Button, message } from 'antd'
+import { message } from 'antd'
 import { history } from 'umi'
 import { JSONEditor, XForm, Card, Icon } from '@/components'
 import { parseFormDataFromSchema } from '@/utils/transformer'
-import { edit } from '@/utils/augmenter'
 import { createSchema } from '@/utils/request'
+import edit from '../_augmenter'
 import './index.sass'
 
 export default function Page() {

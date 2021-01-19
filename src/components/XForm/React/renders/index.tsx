@@ -5,6 +5,7 @@ import Input from './Input'
 import Label from './Label'
 import Format from './Format'
 import Preview from './Preview'
+import Select from './Select'
 import { core } from '../core'
 import './index.sass'
 
@@ -43,6 +44,7 @@ let renders = {
   Format,
   Table,
   Preview,
+  Select,
 }
 
 export default renders

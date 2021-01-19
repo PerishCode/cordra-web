@@ -12,7 +12,7 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/cordra': {
-      target: 'https://172.22.0.1:7711',
+      target: 'https://172.19.250.127:7711',
       changeOrigin: true,
       secure: false,
       pathRewrite: { '^/cordra': '' },

@@ -32,7 +32,7 @@ function Reference({ schema }) {
         ))}
       </Select>
       {/* <Button onClick={updateHandler}>更新选项</Button> */}
-      <Icon type="iconrefresh" onClick={updateHandler} />
+      {/* <Icon type="iconrefresh" onClick={updateHandler} /> */}
     </span>
   )
 }

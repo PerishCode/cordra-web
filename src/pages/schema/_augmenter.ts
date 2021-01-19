@@ -24,9 +24,9 @@ const parsers = {
 
   string: schema =>
     new Promise(resolve => {
-      if (schema['__render__'].length === 0) schema['__render__'] = ['Input']
-      if (schema['__link__']) schema['__render__'] = ['Reference']
-      if (schema['enum']) schema['__render__'] = ['Select']
+      if (schema['__render__'].length === 0) schema['__render__'] = ['Input', 'Label']
+      if (schema['__link__']) schema['__render__'] = ['Reference', 'Label']
+      if (schema['enum']) schema['__render__'] = ['Select', 'Label']
       resolve(schema)
     }),
 }

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { message, Table } from 'antd'
+import { message, Table, Select } from 'antd'
 import { createObjectByTypeName, deleteObjectById, getSchema, search, updateObjectById } from '@/utils/request'
 import { Card, Icon } from '@/components'
 import './index.sass'
+
+const { Option } = Select
 
 export default function Page() {
   const [authors, setAuthors] = useState<any>([])
@@ -39,6 +41,41 @@ export default function Page() {
     })
   }
 
+  const columns = Object.keys(schema?.properties || {})
+    .filter(k => k !== 'id')
+    .map(k => ({
+      title: schema.properties[k].title,
+      dataIndex: k,
+      render: (value, _, index) =>
+        schema.properties[k].enum ? (
+          <Select
+            key={index}
+            value={value}
+            onChange={v => {
+              authors[index].content[k] = v
+              setAuthors(Array.from(authors))
+            }}
+            showArrow={false}
+          >
+            {schema.properties[k].enum.map(v => (
+              <Option value={v} key={v}>
+                {v}
+              </Option>
+            ))}
+          </Select>
+        ) : (
+          <input
+            value={value}
+            onChange={e => {
+              authors[index].content[k] = e.target.value
+              setAuthors(Array.from(authors))
+            }}
+          />
+        ),
+    }))
+
+  const dataSource = authors.map(a => ({ ...a.content, key: a.id }))
+
   return (
     <div className="page author container">
       <Card
@@ -49,43 +86,24 @@ export default function Page() {
         <Table
           className="preview"
           columns={[
-            {
-              title: '姓名',
-              dataIndex: 'name',
-              render: (value, _, index) => (
-                <input
-                  value={value}
-                  onChange={e => {
-                    authors[index].content.name = e.target.value
-                    setAuthors(authors)
-                  }}
-                />
-              ),
-            },
-            {
-              title: '单位',
-              dataIndex: 'organization',
-              render: (value, _, index) => (
-                <input
-                  value={value}
-                  onChange={e => {
-                    authors[index].content.organization = e.target.value
-                    setAuthors(authors)
-                  }}
-                />
-              ),
-            },
+            ...columns,
             {
               title: '操作',
               render: (_, record, index) => (
                 <>
-                  <Icon type="iconshanchu" onClick={() => deleteHandler(record.key)} />
+                  <Icon
+                    type="iconshanchu"
+                    onClick={() => {
+                      console.log(record.key)
+                      deleteHandler(record.key)
+                    }}
+                  />
                   <Icon type="iconyishen" onClick={() => saveHandler(index)} />
                 </>
               ),
             },
           ]}
-          dataSource={authors.map(a => ({ ...a.content, key: a.id }))}
+          dataSource={dataSource}
         />
       </Card>
     </div>

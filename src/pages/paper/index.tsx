@@ -56,6 +56,7 @@ export default function Page() {
         query: 'type:"Paper"',
       }).then(({ results }) => {
         setPapers(results)
+
         setSchema(schema)
       })
     )
@@ -81,6 +82,72 @@ export default function Page() {
     })
   }
 
+  // const columns = []
+
+  const columns = Object.keys(schema?.properties || {}).map(k => ({
+    title: schema.properties[k].title,
+    dataIndex: k,
+    render: schema.properties[k].__link__
+      ? (value, _, index) => (
+          <Reference
+            value={value}
+            onChange={v => {
+              papers[index].content[k] = v
+              setPapers(Array.from(papers))
+            }}
+          />
+        )
+      : (value, _, index) => (
+          <input
+            value={value}
+            onChange={e => {
+              papers[index].content[k] = e.target.value
+              setPapers(Array.from(papers))
+            }}
+          />
+        ),
+  }))
+
+  // {
+  //   title: '论文标题',
+  //   dataIndex: 'title',
+  // render: (value, _, index) => (
+  //   <input
+  //     value={value}
+  //     onChange={e => {
+  //       papers[index].content.title = e.target.value
+  //       setPapers(papers)
+  //     }}
+  //   />
+  // ),
+  // },
+  // {
+  //   title: 'DOI号',
+  //   dataIndex: 'DOI',
+  //   render: (value, _, index) => (
+  //     <input
+  //       value={value}
+  //       onChange={e => {
+  //         papers[index].content.DOI = e.target.value
+  //         setPapers(papers)
+  //       }}
+  //     />
+  //   ),
+  // },
+  // {
+  //   title: '第一作者',
+  //   dataIndex: 'FirstAuthor',
+  // render: (value, _, index) => (
+  //   <Reference
+  //     value={value}
+  //     onChange={v => {
+  //       papers[index].content.FirstAuthor = v
+  //       setPapers(papers)
+  //     }}
+  //   />
+  // ),
+  // },
+
   return (
     <div className="page paper container">
       <Card
@@ -91,45 +158,7 @@ export default function Page() {
         <Table
           className="preview"
           columns={[
-            {
-              title: '论文标题',
-              dataIndex: 'title',
-              render: (value, _, index) => (
-                <input
-                  value={value}
-                  onChange={e => {
-                    papers[index].content.title = e.target.value
-                    setPapers(papers)
-                  }}
-                />
-              ),
-            },
-            {
-              title: 'DOI号',
-              dataIndex: 'DOI',
-              render: (value, _, index) => (
-                <input
-                  value={value}
-                  onChange={e => {
-                    papers[index].content.DOI = e.target.value
-                    setPapers(papers)
-                  }}
-                />
-              ),
-            },
-            {
-              title: '第一作者',
-              dataIndex: 'FirstAuthor',
-              render: (value, _, index) => (
-                <Reference
-                  value={value}
-                  onChange={v => {
-                    papers[index].content.FirstAuthor = v
-                    setPapers(papers)
-                  }}
-                />
-              ),
-            },
+            ...columns,
             {
               title: '操作',
               render: (_, record, index) => (
